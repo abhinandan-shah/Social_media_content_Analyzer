@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Social Media Content Analyzer — Upload</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Social Media Content Analyzer</h2>
+      <p class="muted">Upload PDF or image(s). Text will be extracted and analyzed.</p>
+
+      <form id="upload-form" method="post" action="/upload" enctype="multipart/form-data">
+        <div class="upload-box" id="drop-area">
+          Drag & drop files here or click to select<br/><small>(PDF, PNG, JPG, JPEG)</small>
+        </div>
+        <input class="hidden" id="file-input" name="files" type="file" multiple />
+        <div id="files"></div>
+        <p style="text-align:center;"><button type="submit">Upload & Analyze</button></p>
+      </form>
+
+      <div id="status"></div>
+    </div>
+
+    <script>
+      const drop = document.getElementById('drop-area');
+      const input = document.getElementById('file-input');
+      const filesDiv = document.getElementById('files');
+      drop.addEventListener('click', ()=> input.click());
+      drop.addEventListener('dragover', (e)=>{ e.preventDefault(); drop.style.borderColor='#333'; });
+      drop.addEventListener('dragleave', (e)=>{ drop.style.borderColor='#aaa'; });
+      drop.addEventListener('drop', (e)=>{ e.preventDefault(); drop.style.borderColor='#aaa';
+        input.files = e.dataTransfer.files; showFiles(); });
+      input.addEventListener('change', showFiles);
+      function showFiles(){
+        filesDiv.innerHTML = '';
+        for(const f of input.files){ filesDiv.innerHTML += '<div class="file-row">'+f.name+'</div>'; }
+      }
+      document.getElementById('upload-form').addEventListener('submit', ()=> {
+         document.getElementById('status').innerText = 'Uploading & analyzing — please wait...';
+      });
+    </script>
+  </body>
+</html>

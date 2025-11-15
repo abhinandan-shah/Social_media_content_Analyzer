@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Analysis results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <h2>Analysis complete</h2>
+      <p class="muted">Results saved to: <strong>{{ run_outdir }}</strong></p>
+
+      <div class="files-list">
+        <h3>Files</h3>
+        <ul>
+          {% for fn in files %}
+            <li><a href="{{ url_for('serve_result', run=run_id, filename=fn) }}" target="_blank">{{ fn }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h3>Sentiment Summary</h3>
+          {{ sentiment_html|safe }}
+        </div>
+        <div class="col">
+          <h3>Topics</h3>
+          {{ topics_html|safe }}
+        </div>
+      </div>
+
+      <h3>Cleaned Data (first 50 rows)</h3>
+      {{ cleaned_html|safe }}
+
+      <h3>Images</h3>
+      {% if images %}
+        {% for img in images %}
+          <div class="img-card">
+            <h4>{{ img.name }}</h4>
+            <img src="{{ img.url }}" alt="{{ img.name }}">
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No images produced by analyzer.</p>
+      {% endif %}
+
+      <p><a class="button" href="/">Upload more</a></p>
+    </div>
+  </body>
+</html>
